@@ -68,7 +68,7 @@ internal class ActionTimelineWindow : Window
     {
         if (!Player.Available)
         {
-            ImGui.Text("Player not available");
+            ImGui.Text(Loc.T("Player not available"));
             return;
         }
 

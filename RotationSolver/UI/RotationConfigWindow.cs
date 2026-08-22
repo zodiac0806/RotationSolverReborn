@@ -125,7 +125,7 @@ public partial class RotationConfigWindow : Window
             ShowTooltip = () =>
             {
                 ImGui.BeginTooltip();
-                ImGui.Text("Click to reset plugin configs");
+                ImGui.Text(Loc.T("Click to reset plugin configs"));
                 ImGui.EndTooltip();
             },
             Priority = 3,
@@ -142,7 +142,7 @@ public partial class RotationConfigWindow : Window
             ShowTooltip = () =>
             {
                 ImGui.BeginTooltip();
-                ImGui.Text("Support the developer on Ko-fi");
+                ImGui.Text(Loc.T("Support the developer on Ko-fi"));
                 ImGui.EndTooltip();
             },
             Priority = 2,
@@ -248,19 +248,19 @@ public partial class RotationConfigWindow : Window
         using var popupTabRounding = ImRaii.PushStyle(ImGuiStyleVar.TabRounding, 11f * Scale);
         if (ImGui.BeginPopupModal("Reset RSR Plugin Settings"))
         {
-            ImGui.Text("Are you sure you want to reset all plugin settings?");
+            ImGui.Text(Loc.T("Are you sure you want to reset all plugin settings?"));
             ImGui.Spacing();
-            ImGui.Text("This is often recommended for users having issues while using an installation of RSR using an outdated default configuration.");
+            ImGui.Text(Loc.T("This is often recommended for users having issues while using an installation of RSR using an outdated default configuration."));
             ImGui.Spacing();
 
-            if (ImGui.Button("Yes", new Vector2(120, 0)))
+            if (ImGui.Button(Loc.T("Yes"), new Vector2(120, 0)))
             {
                 Service.Config = new Configs();
                 Service.Config.Save();
                 ImGui.CloseCurrentPopup();
             }
             ImGui.SameLine();
-            if (ImGui.Button("No", new Vector2(120, 0)))
+            if (ImGui.Button(Loc.T("No"), new Vector2(120, 0)))
             {
                 ImGui.CloseCurrentPopup();
             }
@@ -824,7 +824,7 @@ public partial class RotationConfigWindow : Window
             {
                 ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + availableWidth);
                 ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudOrange);
-                ImGui.TextWrapped($"Warning: You are running the '{Watcher.DalamudBranch()}' branch of Dalamud. For best compatibility, use /xlbranch and switch back to 'release' branch if available for your current version of FFXIV.");
+                ImGui.TextWrapped(string.Format(Loc.T("警告：你目前使用的是 Dalamud 的「{0}」分支。為了最佳相容性，請使用 /xlbranch 指令，並在你目前的 FFXIV 版本有提供時切換回「release」分支。"), Watcher.DalamudBranch()));
                 ImGui.PopStyleColor();
                 ImGui.PopTextWrapPos();
                 ImGui.Spacing();
@@ -911,7 +911,7 @@ public partial class RotationConfigWindow : Window
         {
             float avail = ImGui.GetContentRegionAvail().X;
             ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + avail);
-            ImGui.TextWrapped($"Tip: {_usageHints[_hintIndex]}");
+            ImGui.TextWrapped(string.Format(Loc.T("提示：{0}"), _usageHints[_hintIndex]));
             ImGui.PopTextWrapPos();
         }
         ImGui.Spacing();
@@ -1043,7 +1043,7 @@ public partial class RotationConfigWindow : Window
 
                     default:
                         // Handle unexpected tab values
-                        ImGui.Text("Unknown tab selected.");
+                        ImGui.Text(Loc.T("Unknown tab selected."));
                         break;
                 }
             }
@@ -1406,9 +1406,9 @@ public partial class RotationConfigWindow : Window
         // Adjust item spacing for better layout
         using ImRaii.Style style = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, new Vector2(0f, 5f));
         ImGui.NewLine();
-        ImGui.TextWrapped("These commands can be used to open or change plugin settings directly from chat or macros.");
+        ImGui.TextWrapped(Loc.T("These commands can be used to open or change plugin settings directly from chat or macros."));
         ImGui.NewLine();
-        ImGui.TextWrapped("Simply right clicking any action, setting, or toggle will pop up the macro associated with it.");
+        ImGui.TextWrapped(Loc.T("Simply right clicking any action, setting, or toggle will pop up the macro associated with it."));
     }
 
     // Helper method to display command help
@@ -1533,7 +1533,7 @@ public partial class RotationConfigWindow : Window
                 catch (Exception ex)
                 {
                     // Handle the exception (e.g., log it or display an error message)
-                    ImGui.TextColored(ImGuiColors.DalamudRed, $"Failed to open config folder: {ex.Message}");
+                    ImGui.TextColored(ImGuiColors.DalamudRed, string.Format(Loc.T("開啟設定資料夾失敗：{0}"), ex.Message));
                 }
             }
         }, width, textWidth);
@@ -1550,7 +1550,7 @@ public partial class RotationConfigWindow : Window
         else
         {
             // Handle the case where the texture is not found
-            ImGui.Text("Failed to load GitHub icon.");
+            ImGui.Text(Loc.T("Failed to load GitHub icon."));
         }
     }
     #endregion
@@ -1559,54 +1559,54 @@ public partial class RotationConfigWindow : Window
 
     private void DrawAutoduty()
     {
-        ImGui.TextWrapped("While the RSR Team has made effort to make RSR compatible with Autoduty, please keep in mind that RSR is not designed with botting in mind.");
+        ImGui.TextWrapped(Loc.T("While the RSR Team has made effort to make RSR compatible with Autoduty, please keep in mind that RSR is not designed with botting in mind."));
         ImGui.Spacing();
-        ImGui.TextWrapped("This menu is for troubleshooting and initial setup purposes and is a good first step to share to get assistance.");
+        ImGui.TextWrapped(Loc.T("This menu is for troubleshooting and initial setup purposes and is a good first step to share to get assistance."));
         ImGui.Spacing();
-        ImGui.TextWrapped("Below are relevant settings and their current states for RSR to work well with AutoDuty mode.");
+        ImGui.TextWrapped(Loc.T("Below are relevant settings and their current states for RSR to work well with AutoDuty mode."));
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.Spacing();
         // Display the current HostileType
-        ImGui.TextWrapped($"Current Targeting Mode: {GetHostileTypeDescription(DataCenter.CurrentTargetToHostileType)}");
+        ImGui.TextWrapped(string.Format(Loc.T("目前鎖定模式：{0}"), GetHostileTypeDescription(DataCenter.CurrentTargetToHostileType)));
 
         // Add a button to change the targeting to AllTargetsCanAttack (type 0) aka Autoduty Mode
-        if (ImGui.Button("Change Targeting to Autoduty Mode"))
+        if (ImGui.Button(Loc.T("Change Targeting to Autoduty Mode")))
         {
             SetTargetingType(TargetHostileType.AllTargetsCanAttack);
         }
 
         // Display the current NPC Heal/Raise Support status
-        ImGui.TextWrapped($"NPC Heal/Raise Support Enabled: {Service.Config.FriendlyPartyNpcHealRaise3}");
-        if (ImGui.Button("Enable NPC Heal/Raise Support"))
+        ImGui.TextWrapped(string.Format(Loc.T("NPC 治療／複生支援已啟用：{0}"), Service.Config.FriendlyPartyNpcHealRaise3));
+        if (ImGui.Button(Loc.T("Enable NPC Heal/Raise Support")))
         {
             Service.Config.FriendlyPartyNpcHealRaise3.Value = true;
         }
         ImGui.Spacing();
         // Display the Auto Off Between Area status
-        ImGui.TextWrapped($"Auto Off Between Areas: {Service.Config.AutoOffBetweenArea}");
-        if (ImGui.Button("Disable Auto Off Between Areas"))
+        ImGui.TextWrapped(string.Format(Loc.T("區域間自動關閉：{0}"), Service.Config.AutoOffBetweenArea));
+        if (ImGui.Button(Loc.T("Disable Auto Off Between Areas")))
         {
             Service.Config.AutoOffBetweenArea.Value = false;
         }
         ImGui.Spacing();
         // Display the Auto Off Cut Scene status
-        ImGui.TextWrapped($"Auto Off During Cutscenes: {Service.Config.AutoOffCutScene}");
-        if (ImGui.Button("Disable Auto Off During Cutscenes"))
+        ImGui.TextWrapped(string.Format(Loc.T("過場動畫時自動關閉：{0}"), Service.Config.AutoOffCutScene));
+        if (ImGui.Button(Loc.T("Disable Auto Off During Cutscenes")))
         {
             Service.Config.AutoOffCutScene.Value = false;
         }
         ImGui.Spacing();
         // Display the Auto Off After Combat Time status
-        ImGui.TextWrapped($"Auto Off After Combat: {Service.Config.AutoOffAfterCombat}");
-        if (ImGui.Button("Disable Auto Off After Combat"))
+        ImGui.TextWrapped(string.Format(Loc.T("戰鬥結束後自動關閉：{0}"), Service.Config.AutoOffAfterCombat));
+        if (ImGui.Button(Loc.T("Disable Auto Off After Combat")))
         {
             Service.Config.AutoOffAfterCombat.Value = false;
         }
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.Spacing();
-        ImGui.TextWrapped($"Below are plugins used by Autoduty and their current states");
+        ImGui.TextWrapped(Loc.T("以下是 Autoduty 使用的插件及其目前狀態"));
         ImGui.Spacing();
 
         // Create a new list of AutoDutyPlugin objects
@@ -1644,7 +1644,7 @@ public partial class RotationConfigWindow : Window
             {
                 if (DalamudReflector.HasRepo(plugin.Url) && !isInstalled)
                 {
-                    if (ImGui.Button($"Add Plugin##{plugin.Name}"))
+                    if (ImGui.Button(string.Format(Loc.T("新增插件##{0}"), plugin.Name)))
                     {
                         PluginLog.Information($"Attempting to add plugin: {plugin.Name} from URL: {plugin.Url}");
                         _ = DalamudReflector.AddPlugin(plugin.Url, plugin.Name).ContinueWith(t =>
@@ -1665,7 +1665,7 @@ public partial class RotationConfigWindow : Window
                 }
                 else if (!DalamudReflector.HasRepo(plugin.Url))
                 {
-                    if (ImGui.Button($"Add Repo##{plugin.Name}"))
+                    if (ImGui.Button(string.Format(Loc.T("新增儲存庫##{0}"), plugin.Name)))
                     {
                         PluginLog.Information($"Attempting to add repository: {plugin.Url}");
                         DalamudReflector.AddRepo(plugin.Url, true);
@@ -2106,13 +2106,13 @@ public partial class RotationConfigWindow : Window
         if (Player.AvailableThreadSafe && DataCenter.PartyMembers != null && Player.Object.IsJobs(Job.DNC))
         {
             ImGui.Spacing();
-            ImGui.Text("Dance Partner Priority");
+            ImGui.Text(Loc.T("Dance Partner Priority"));
             ImGui.Spacing();
             //var currentDancePartnerPriority = ActionTargetInfo.FindTargetByType(DataCenter.PartyMembers, TargetType.DancePartner, 0, SpecialActionType.None);
-            //ImGui.Text($"Current Target: {currentDancePartnerPriority?.Name ?? "None"}");
+            //ImGui.Text(string.Format(Loc.T("目前目標：{0}"), currentDancePartnerPriority?.Name ?? "None"));
             //ImGui.Spacing();
 
-            if (ImGui.Button("Reset to Default"))
+            if (ImGui.Button(Loc.T("Reset to Default")))
             {
                 OtherConfiguration.ResetDancePartnerPriority();
             }
@@ -2158,13 +2158,13 @@ public partial class RotationConfigWindow : Window
         if (Player.AvailableThreadSafe && DataCenter.PartyMembers != null && Player.Object.IsJobs(Job.SGE))
         {
             ImGui.Spacing();
-            ImGui.Text("Kardia Tank Priority");
+            ImGui.Text(Loc.T("Kardia Tank Priority"));
             ImGui.Spacing();
             //var currentKardiaTankPriority = ActionTargetInfo.FindTargetByType(DataCenter.PartyMembers, TargetType.Kardia, 0, SpecialActionType.None);
-            //ImGui.Text($"Current Target: {currentKardiaTankPriority?.Name ?? "None"}");
+            //ImGui.Text(string.Format(Loc.T("目前目標：{0}"), currentKardiaTankPriority?.Name ?? "None"));
             //ImGui.Spacing();
 
-            if (ImGui.Button("Reset to Default"))
+            if (ImGui.Button(Loc.T("Reset to Default")))
             {
                 OtherConfiguration.ResetKardiaTankPriority();
             }
@@ -2216,13 +2216,13 @@ public partial class RotationConfigWindow : Window
             // Column 1: Spear Card Priority
             ImGui.TableNextColumn();
             ImGui.Spacing();
-            ImGui.Text("Spear Card Priority");
+            ImGui.Text(Loc.T("Spear Card Priority"));
             ImGui.Spacing();
             //var currentTheSpearPriority = ActionTargetInfo.FindTargetByType(DataCenter.PartyMembers, TargetType.TheSpear, 0, SpecialActionType.None);
-            //ImGui.Text($"Current Target: {currentTheSpearPriority?.Name ?? "None"}");
+            //ImGui.Text(string.Format(Loc.T("目前目標：{0}"), currentTheSpearPriority?.Name ?? "None"));
             //ImGui.Spacing();
 
-            if (ImGui.Button("Reset to Default##Spear"))
+            if (ImGui.Button(Loc.T("Reset to Default##Spear")))
             {
                 OtherConfiguration.ResetTheSpearPriority();
             }
@@ -2267,13 +2267,13 @@ public partial class RotationConfigWindow : Window
             // Column 2: Balance Card Priority
             ImGui.TableNextColumn();
             ImGui.Spacing();
-            ImGui.Text("Balance Card Priority");
+            ImGui.Text(Loc.T("Balance Card Priority"));
             ImGui.Spacing();
             //var currentTheBalancePriority = ActionTargetInfo.FindTargetByType(DataCenter.PartyMembers, TargetType.TheBalance, 0, SpecialActionType.None);
-            //ImGui.Text($"Current Target: {currentTheBalancePriority?.Name ?? "None"}");
+            //ImGui.Text(string.Format(Loc.T("目前目標：{0}"), currentTheBalancePriority?.Name ?? "None"));
             //ImGui.Spacing();
 
-            if (ImGui.Button("Reset to Default##Balance"))
+            if (ImGui.Button(Loc.T("Reset to Default##Balance")))
             {
                 OtherConfiguration.ResetTheBalancePriority();
             }
@@ -2756,28 +2756,28 @@ public partial class RotationConfigWindow : Window
             ImGui.TableNextRow(ImGuiTableRowFlags.Headers);
 
             _ = ImGui.TableNextColumn();
-            if (ImGui.Button("Reset and Update Invuln Status List"))
+            if (ImGui.Button(Loc.T("Reset and Update Invuln Status List")))
             {
                 OtherConfiguration.ResetInvincibleStatus();
             }
             ImGui.TableHeader(UiString.ConfigWindow_List_Invincibility.GetDescription());
 
             _ = ImGui.TableNextColumn();
-            if (ImGui.Button("Reset and Update Priority Status List"))
+            if (ImGui.Button(Loc.T("Reset and Update Priority Status List")))
             {
                 OtherConfiguration.ResetPriorityStatus();
             }
             ImGui.TableHeader(UiString.ConfigWindow_List_Priority.GetDescription());
 
             _ = ImGui.TableNextColumn();
-            if (ImGui.Button("Reset and Update Dispell Debuff List"))
+            if (ImGui.Button(Loc.T("Reset and Update Dispell Debuff List")))
             {
                 OtherConfiguration.ResetDangerousStatus();
             }
             ImGui.TableHeader(UiString.ConfigWindow_List_DangerousStatus.GetDescription());
 
             _ = ImGui.TableNextColumn();
-            if (ImGui.Button("Reset and Update No Casting Status List"))
+            if (ImGui.Button(Loc.T("Reset and Update No Casting Status List")))
             {
                 OtherConfiguration.ResetNoCastingStatus();
             }
@@ -2975,7 +2975,7 @@ public partial class RotationConfigWindow : Window
 
                 if (filtered.Count == 0)
                 {
-                    ImGui.TextColored(ImGuiColors.DalamudRed, "No matching statuses found.");
+                    ImGui.TextColored(ImGuiColors.DalamudRed, Loc.T("No matching statuses found."));
                     return;
                 }
 
@@ -3012,28 +3012,28 @@ public partial class RotationConfigWindow : Window
             ImGui.TableNextRow(ImGuiTableRowFlags.Headers);
 
             _ = ImGui.TableNextColumn();
-            if (ImGui.Button("Reset and Update Tankbuster List"))
+            if (ImGui.Button(Loc.T("Reset and Update Tankbuster List")))
             {
                 OtherConfiguration.ResetHostileCastingTank();
             }
             ImGui.TableHeader(UiString.ConfigWindow_List_HostileCastingTank.GetDescription());
 
             _ = ImGui.TableNextColumn();
-            if (ImGui.Button("Reset and Update AOE List"))
+            if (ImGui.Button(Loc.T("Reset and Update AOE List")))
             {
                 OtherConfiguration.ResetHostileCastingArea();
             }
             ImGui.TableHeader(UiString.ConfigWindow_List_HostileCastingArea.GetDescription());
 
             _ = ImGui.TableNextColumn();
-            if (ImGui.Button("Reset and Update Knockback List"))
+            if (ImGui.Button(Loc.T("Reset and Update Knockback List")))
             {
                 OtherConfiguration.ResetHostileCastingKnockback();
             }
             ImGui.TableHeader(UiString.ConfigWindow_List_HostileCastingKnockback.GetDescription());
 
             _ = ImGui.TableNextColumn();
-            if (ImGui.Button("Reset and Stop Casting List"))
+            if (ImGui.Button(Loc.T("Reset and Stop Casting List")))
             {
                 OtherConfiguration.ResetHostileCastingStop();
             }
@@ -3163,7 +3163,7 @@ public partial class RotationConfigWindow : Window
             {
                 if (string.IsNullOrWhiteSpace(_actionPopupSearching))
                 {
-                    ImGui.TextColored(ImGuiColors.DalamudYellow, "Enter a search term to filter actions.");
+                    ImGui.TextColored(ImGuiColors.DalamudYellow, Loc.T("Enter a search term to filter actions."));
                 }
                 else
                 {
@@ -3237,7 +3237,7 @@ public partial class RotationConfigWindow : Window
 
                     if (shown == 0)
                     {
-                        ImGui.TextColored(ImGuiColors.DalamudRed, "No matching actions found.");
+                        ImGui.TextColored(ImGuiColors.DalamudRed, Loc.T("No matching actions found."));
                     }
                 }
             }

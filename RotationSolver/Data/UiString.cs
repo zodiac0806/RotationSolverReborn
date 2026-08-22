@@ -664,7 +664,7 @@ namespace RotationSolver.Data
 
             DescriptionAttribute? attribute = field.GetCustomAttribute<DescriptionAttribute>();
 
-            string descString = attribute == null ? value.ToString() : attribute.Description;
+            string descString = attribute == null ? value.ToString() : Loc.T(attribute.Description);
             _enumDescriptions.Add(value, descString);
             return descString;
         }

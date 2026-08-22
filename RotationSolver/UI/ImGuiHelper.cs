@@ -117,7 +117,7 @@ internal static class ImGuiHelper
 
         if (items == null || items.Length == 0)
         {
-            ImGui.TextColored(ImGuiColors.DalamudRed, "ConfigWindow_Condition_NoItemsWarning".Loc("There are no items!"));
+            ImGui.TextColored(ImGuiColors.DalamudRed, "ConfigWindow_Condition_NoItemsWarning".Loc(Loc.T("There are no items!")));
             return;
         }
 
@@ -696,7 +696,7 @@ internal static class ImGuiHelper
                 ImGui.SameLine();
             }
 
-            ImGui.TextColored(ImGuiColors.DalamudRed, " None of PvE or PvP!");
+            ImGui.TextColored(ImGuiColors.DalamudRed, Loc.T(" None of PvE or PvP!"));
         }
     }
 }

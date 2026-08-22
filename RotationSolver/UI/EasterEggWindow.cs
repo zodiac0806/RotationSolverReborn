@@ -94,7 +94,7 @@ internal class EasterEggWindow : Window
 
         ImGui.Spacing();
         ImGui.Separator();
-        ImGui.Text("I made this because i was bored");
+        ImGui.Text(Loc.T("I made this because i was bored"));
         ImGui.Spacing();
 
         using (var __ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow))
@@ -103,12 +103,12 @@ internal class EasterEggWindow : Window
         }
         ImGui.Spacing();
 
-        if (ImGui.Button("Reset"))
+        if (ImGui.Button(Loc.T("Reset")))
         {
             Reset();
         }
         ImGui.SameLine();
-        if (ImGui.Button("Close"))
+        if (ImGui.Button(Loc.T("Close")))
         {
             IsOpen = false;
         }

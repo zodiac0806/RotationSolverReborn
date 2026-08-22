@@ -82,10 +82,10 @@ internal class ControlWindow : CtrlWindow
         columnWidth = Math.Max(columnWidth, ImGui.GetCursorPosX());
 
         TargetingType autoMode = DataCenter.TargetingType;
-        ImGui.Text(" Targeting: " + autoMode.ToString());
+        ImGui.Text(Loc.T(" Targeting: ") + autoMode.ToString());
 
         ConfigTypes.AoEType aoeType = Service.Config.AoEType;
-        if (ImGuiHelper.SelectableButton("AoE: " + aoeType.ToString()))
+        if (ImGuiHelper.SelectableButton(Loc.T("AoE: ") + aoeType.ToString()))
         {
             aoeType = (ConfigTypes.AoEType)(((int)aoeType + 1) % 3);
             Service.Config.AoEType = aoeType;
@@ -203,7 +203,7 @@ internal class ControlWindow : CtrlWindow
 
         ImGui.Spacing();
 
-        ImGui.Text("CMD:");
+        ImGui.Text(Loc.T("CMD:"));
         ImGui.SameLine();
 
         _ = DrawIAction(DataCenter.CommandNextAction, Service.Config.ControlWindow0GCDSize, 1);
@@ -214,7 +214,7 @@ internal class ControlWindow : CtrlWindow
         if (group)
         {
             ImGui.Text(DataCenter.CurrentTargetToHostileType.GetDescription());
-            ImGui.Text("Auto: " + DataCenter.AutoStatus.ToString());
+            ImGui.Text(Loc.T("Auto: ") + DataCenter.AutoStatus.ToString());
         }
     }
 

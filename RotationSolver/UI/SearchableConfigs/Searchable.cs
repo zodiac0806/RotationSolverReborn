@@ -189,7 +189,7 @@ internal abstract class Searchable(PropertyInfo property) : ISearchable
         get
         {
             UIAttribute? ui = _property.GetCustomAttribute<UIAttribute>();
-            return ui == null ? string.Empty : ui.Name;
+            return ui == null ? string.Empty : global::RotationSolver.Loc.T(ui.Name);
         }
     }
 
@@ -198,7 +198,7 @@ internal abstract class Searchable(PropertyInfo property) : ISearchable
         get
         {
             UIAttribute? ui = _property.GetCustomAttribute<UIAttribute>();
-            return ui == null || string.IsNullOrEmpty(ui.Description) ? string.Empty : ui.Description;
+            return ui == null || string.IsNullOrEmpty(ui.Description) ? string.Empty : global::RotationSolver.Loc.T(ui.Description);
         }
     }
 

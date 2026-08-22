@@ -153,8 +153,8 @@ namespace RotationSolver.UI
             DrawChangeLog();
 
             ImGui.Separator();
-            ImGui.Text("Older changelogs are available on GitHub");
-            if (ImGui.Button("Open GitHub"))
+            ImGui.Text(Loc.T("Older changelogs are available on GitHub"));
+            if (ImGui.Button(Loc.T("Open GitHub")))
             {
                 _ = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = $"https://github.com/{Service.USERNAME}/{Service.REPO}", UseShellExecute = true });
             }
@@ -171,7 +171,7 @@ namespace RotationSolver.UI
             GitHubCommitComparison changeLog = _changeLog;
             if (changeLog == null || changeLog.Commits == null || changeLog.Commits.Count == 0)
             {
-                ImGui.Text("No changelog available.");
+                ImGui.Text(Loc.T("No changelog available."));
                 return;
             }
 
@@ -200,7 +200,7 @@ namespace RotationSolver.UI
             int authorCount = authors.Count;
 
             ImGui.PushFont(FontManager.GetFont(ImGui.GetFontSize() + 1));
-            ImGui.Text($"You've missed {commitCount} changes from {authorCount} contributer{(authorCount > 1 ? "s" : "")}!");
+            ImGui.Text(string.Format(Loc.T("你錯過了來自 {1} 位貢獻者的 {0} 項變更！"), commitCount, authorCount, (authorCount > 1 ? "s" : "")));
             ImGui.PopFont();
 
             foreach (Commit commit in commits)
@@ -210,12 +210,12 @@ namespace RotationSolver.UI
                 ImGui.Indent();
                 ImGui.TextWrapped($"- {commit.CommitData.Message}");
 
-                ImGui.TextWrapped($"By: @{commit.CommitData.CommitAuthor.Name}");
+                ImGui.TextWrapped(string.Format(Loc.T("作者：@{0}"), commit.CommitData.CommitAuthor.Name));
                 ImGui.Unindent();
             }
 
             ImGui.NewLine();
-            ImGui.Text("Contributors:");
+            ImGui.Text(Loc.T("Contributors:"));
             foreach (string author in authors)
             {
                 if (ImGui.Button(author))
@@ -237,12 +237,12 @@ namespace RotationSolver.UI
                     deletions += f.Deletions;
                 }
             }
-            if (ImGui.CollapsingHeader("Fun stats for nerds"))
+            if (ImGui.CollapsingHeader(Loc.T("Fun stats for nerds")))
             {
-                ImGui.Text($"Total commits: {changeLog.TotalCommits}");
-                ImGui.Text($"Total files changed: {files}");
-                ImGui.Text($"Total additions: {additions}");
-                ImGui.Text($"Total deletions: {deletions}");
+                ImGui.Text(string.Format(Loc.T("總提交數：{0}"), changeLog.TotalCommits));
+                ImGui.Text(string.Format(Loc.T("變更檔案數：{0}"), files));
+                ImGui.Text(string.Format(Loc.T("新增行數：{0}"), additions));
+                ImGui.Text(string.Format(Loc.T("刪除行數：{0}"), deletions));
             }
         }
 
