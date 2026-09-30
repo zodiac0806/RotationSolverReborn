@@ -1,64 +1,56 @@
+# 台服(TC)版發布。上游版本會從 goatcorp 抓最新 Dalamud 編譯,那是國際服的組件,
+# 編出來的插件在台服可能因簽名/結構不合而掛掉,所以改用台服相容的 Dalamud 13.0.0.16 釘版。
+# 發版:推一個 v<版號> 的 tag(例如 v7.20.0.1),或手動在 Actions 對該 tag 觸發。
 name: Publish
 on:
   push:
     tags:
-      - '*.*.*.*'
+      - 'v*'
+  workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   Build:
-    permissions:
-      contents: write
     runs-on: windows-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
         with:
           submodules: true
-      
-      - name: Setup NuGet.exe for use with actions
-        uses: NuGet/setup-nuget@v2
-        with:
-          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
-          
-      - name: Get Environment Variables
-        run: |
-          $tag = "${{ github.ref }}" -replace 'refs/tags/', ''
 
-          "tag=$tag" | Out-File -Append -FilePath $Env:GITHUB_ENV
-          
+      - name: Resolve version
+        shell: pwsh
+        run: |
+          $ver = "${{ github.ref_name }}" -replace '^v'
+          if ($ver -notmatch '^\d+(\.\d+){0,3}$') { throw "tag '${{ github.ref_name }}' 不是 v<版號>" }
+          "ver=$ver" | Out-File -Append -FilePath $Env:GITHUB_ENV
+
       - name: Set up .NET
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.0.x'
 
-      - name: Download Dalamud Latest
+      - name: Download Dalamud (pinned TC-compatible build)
+        shell: pwsh
         run: |
-          Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile latest.zip
-          Expand-Archive -Force latest.zip -DestinationPath "$env:AppData\XIVLauncher\addon\Hooks\dev"
+          Invoke-WebRequest -Uri https://github.com/zodiac0806/BossmodReborn-TC/releases/download/dalamud-pin-v13.0.0.16/dalamud-api13-net9.zip -OutFile dalamud-pinned.zip
+          Expand-Archive -Force dalamud-pinned.zip "$env:AppData\XIVLauncher\addon\Hooks\dev"
 
       - name: Restore Nuget Packages for RSR
         run: dotnet restore RotationSolver/RotationSolver.csproj
 
       - name: Build Plugin
-        run: dotnet build --no-restore -c Release RotationSolver/RotationSolver.csproj -p:AssemblyVersion=${{ env.tag }} -p:FileVersion=${{ env.tag }} -p:PackageVersion=${{ env.tag }} -p:InformationalVersion=${{ env.tag }} --output .\build
+        run: dotnet build --no-restore -c Release RotationSolver/RotationSolver.csproj -p:Version=${{ env.ver }} -p:AssemblyVersion=${{ env.ver }} -p:FileVersion=${{ env.ver }} -p:PackageVersion=${{ env.ver }} -p:InformationalVersion=${{ env.ver }} --output .\build
 
       - name: Zip Plugin
-        run: Compress-Archive -Path .\build\* -DestinationPath .\build\RotationSolver.zip
+        shell: pwsh
+        run: |
+          $m = Get-Content -Raw .\build\RotationSolver.json | ConvertFrom-Json
+          if ($m.AssemblyVersion -ne "${{ env.ver }}") { $m.AssemblyVersion = "${{ env.ver }}"; $m | ConvertTo-Json -Depth 10 | Set-Content .\build\RotationSolver.json }
+          Compress-Archive -Path .\build\* -DestinationPath .\RotationSolver.zip
 
       - name: Publish Plugin
         uses: softprops/action-gh-release@v2
         with:
-          files: ./build/RotationSolver.zip
+          files: ./RotationSolver.zip
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Doc Gen Tool
-        run: |
-          dotnet pack -c Release RotationSolver.DocumentationGenerator/RotationSolver.DocumentationGenerator.csproj
-          dotnet tool restore --add-source RotationSolver.DocumentationGenerator/nupkg
-      - name: Build Docs
-        run: dotnet tool run docgen build/RotationSolver.Basic.xml build/RebornRotations.xml
-      - name: Publish Docs
-        uses: Andrew-Chen-Wang/github-wiki-action@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: _doc/
-          commit-message: Update wiki to ${{ env.tag }}
