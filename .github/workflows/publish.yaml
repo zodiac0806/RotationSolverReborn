@@ -54,3 +54,5 @@ jobs:
         with:
           files: ./RotationSolver.zip
           token: ${{ secrets.GITHUB_TOKEN }}
+
+# 2026-09-30: fork 的 workflow 未被 Actions 註冊,touch 本檔強制重掃
